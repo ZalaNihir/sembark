@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ShortenUrlRequest;
 use App\Http\Services\ShortenService;
 use App\Models\ShortenUrl;
-use Illuminate\Http\Request;
 
 class ShortenUrlController extends Controller
 {
     public function __construct(protected ShortenService $shortenService)
     {
         $this->middleware('permission:url.view')->only('index');
+        $this->middleware('permission:url.create')->only('store');
+        $this->middleware('permission:url.edit')->only('update');
+        $this->middleware('permission:url.delete')->only('destroy');
     }
     /**
      * Display a listing of the resource.

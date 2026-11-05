@@ -5,12 +5,14 @@
                 {{ __('URLs') }}
             </h2>
 
-            <x-primary-button type="button" onclick="openModal()">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                {{ __('Add URL') }}
-            </x-primary-button>
+            @can('url.create')
+                <x-primary-button type="button" onclick="openModal()">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    {{ __('Add URL') }}
+                </x-primary-button>
+            @endcan
         </div>
     </x-slot>
 
@@ -47,17 +49,20 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ $url->counts }} </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <!-- AJAX Edit ke liye href ko badla aur preventDefault lagaya -->
-                                            <a href="#"
-                                                onclick="event.preventDefault(); openModal({{ $url->id }}, '{{ route('urls.edit', $url) }}')"
-                                                class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                                            <form action="{{ route('urls.destroy', $url) }}" method="POST"
-                                                class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="text-red-600 hover:text-red-900">Delete</button>
-                                            </form>
+                                            @can('url.edit')
+                                                <a href="#"
+                                                    onclick="event.preventDefault(); openModal({{ $url->id }}, '{{ route('urls.edit', $url) }}')"
+                                                    class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                                            @endcan
+                                            @can('url.delete')
+                                                <form action="{{ route('urls.destroy', $url) }}" method="POST"
+                                                    class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="text-red-600 hover:text-red-900">Delete</button>
+                                                </form>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @empty
@@ -69,7 +74,8 @@
                             </tbody>
                             <tfoot class="bg-gray-50">
                                 <tr>
-                                    <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    <td colspan="4"
+                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $urls->links() }}
                                     </td>
                                 </tr>
