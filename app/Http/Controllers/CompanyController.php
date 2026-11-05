@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Services\CompanyService;
 use App\Models\Company;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
