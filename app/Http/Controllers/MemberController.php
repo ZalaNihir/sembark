@@ -10,7 +10,12 @@ use Illuminate\Http\Request;
 class MemberController extends Controller
 {
     public function __construct(protected MemberService $memberService)
-    {}
+    {
+        $this->middleware('permission:members.view')->only(['index', 'show']);
+        $this->middleware('permission:members.create')->only(['create', 'store']);
+        $this->middleware('permission:members.edit')->only(['edit', 'update']);
+        $this->middleware('permission:members.delete')->only(['destroy']);
+    }
 
     public function index()
     {
