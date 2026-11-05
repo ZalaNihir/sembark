@@ -4,11 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
+use Illuminate\Support\Str;
 
 class MasterAdminSeeder extends Seeder
 {
@@ -16,41 +16,67 @@ class MasterAdminSeeder extends Seeder
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        $permissions = [
+        $companyPermissions = [
             'companies.view',
             'companies.create',
             'companies.edit',
             'companies.delete',
         ];
 
-        foreach ($permissions as $permission) {
+        $memberPermissions = [
+            'members.view',
+            'members.create',
+            'members.edit',
+            'members.delete',
+        ];
+
+        $allPermissions = array_merge($companyPermissions, $memberPermissions);
+
+        foreach ($allPermissions as $permission) {
             Permission::firstOrCreate([
                 'name' => $permission,
                 'guard_name' => 'web',
             ]);
         }
 
-        $role = Role::firstOrCreate([
+        $superAdminRole = Role::firstOrCreate([
             'name' => 'SuperAdmin',
             'guard_name' => 'web',
         ]);
 
-        $role->syncPermissions($permissions);
+        $superAdminRole->syncPermissions($companyPermissions);
+
+        $adminRole = Role::firstOrCreate([
+            'name' => 'Admin',
+            'guard_name' => 'web',
+        ]);
+
+        $adminRole->syncPermissions($memberPermissions);
+
+        $otherRoles = [
+            'Member',
+        ];
+
+        foreach ($otherRoles as $roleName) {
+            Role::firstOrCreate([
+                'name' => $roleName,
+                'guard_name' => 'web',
+            ]);
+        }
 
         User::updateOrCreate(
             ['email' => 'masteradmin@example.com'],
             [
                 'name' => 'Master Admin',
                 'email_verified_at' => now(),
-                'password' => Hash::make('password'),
+                'password' => env('APP_ENV') === 'local' ? Hash::make('password') : Hash::make(Str::random(64)),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
         );
 
         $user = User::where('email', 'masteradmin@example.com')->firstOrFail();
-
-        $user->assignRole($role);
+        $user->assignRole($superAdminRole);
 
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }

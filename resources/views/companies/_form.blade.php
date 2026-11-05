@@ -1,18 +1,11 @@
 <div class="space-y-8">
 
-    <!-- SECTION 1: COMPANY INFORMATION -->
-<!-- _form.blade.php ka top section -->
-<div class="space-y-8">
-
-    <!-- SECTION 1: COMPANY INFORMATION -->
     <div>
         <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2 mb-6">
             {{ __('Company Information') }}
         </h3>
 
-        <!-- Yahan sm: grid active kiya hai taaki choti screens par bhi columns side-by-side aayein -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
-            <!-- Company Name -->
             <div>
                 <x-input-label for="name" :value="__('Company Name')" />
                 <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
@@ -20,7 +13,6 @@
                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
             </div>
 
-            <!-- Email -->
             <div>
                 <x-input-label for="email" :value="__('Company Email')" />
                 <x-text-input id="email" name="email" type="email" class="mt-1 block w-full"
@@ -28,7 +20,6 @@
                 <x-input-error class="mt-2" :messages="$errors->get('email')" />
             </div>
 
-            <!-- Phone Number -->
             <div>
                 <x-input-label for="phone" :value="__('Phone Number')" />
                 <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full"
@@ -37,7 +28,6 @@
             </div>
         </div>
 
-        <!-- Row 2: Database, Address & Description -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
             <div>
@@ -78,7 +68,6 @@
     </div>
     @endif
 
-    <!-- ACTION BUTTONS -->
     <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-100">
         <a href="{{ route('companies.index') }}" class="text-sm text-gray-600 hover:text-gray-900 underline rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             {{ __('Cancel') }}

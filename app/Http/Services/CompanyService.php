@@ -3,7 +3,6 @@
 namespace App\Http\Services;
 
 use App\Models\Company;
-use App\Jobs\CreateCompanyDatabase;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +23,7 @@ class CompanyService
         $user = User::create([
             'name' => $data['user_name'],
             'email' => $data['user_email'],
-            'password' => Hash::make(Str::random(64))
+            'password' => env('APP_ENV') === 'local' ? Hash::make('password') : Hash::make(Str::random(64))
         ]);
 
         $company = Company::create([
@@ -33,7 +32,6 @@ class CompanyService
             'address' => $data['address'],
             'phone' => $data['phone'],
             'email' => $data['email'],
-            'database_name' => $this->generateUniqueSlug($data['name']),
             'user_id'=>$user->id,
         ]);
 
@@ -42,8 +40,6 @@ class CompanyService
         ]);
 
         $user->assignRole('Admin');
-
-        CreateCompanyDatabase::dispatch($company);
 
         Password::sendResetLink([
             'email' => $user->email
@@ -82,17 +78,4 @@ class CompanyService
         });
     }
 
-    private function generateUniqueSlug($title)
-    {
-        $slug = Str::slug($title);
-        $databaseName = $slug;
-        $counter = 1;
-
-        while (Company::where('database_name', $databaseName)->exists()) {
-            $databaseName = "{$slug}-{$counter}";
-            $counter++;
-        }
-
-        return $databaseName;
-    }
 }
