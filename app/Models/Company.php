@@ -14,7 +14,26 @@ class Company extends Model
         'name','description','address','phone','email','user_id','database_name'
     ];
 
-    public function users(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function subUsers()
+    {
+        return $this->hasMany(User::class, 'parent_id', 'user_id');
+    }
+
+
+    public function urls()
+    {
+        return $this->hasManyThrough(
+            ShortenUrl::class,
+            User::class,
+            'id',
+            'user_id',
+            'user_id',
+            'id'
+        );
+    }
+
 }

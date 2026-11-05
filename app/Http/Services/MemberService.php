@@ -9,9 +9,9 @@ use Pest\Support\Str;
 
 class MemberService
 {
-    public function getAllMembers()
+    public function getAllMembers($userId)
     {
-        return User::where('parent_id', auth()->user()->id)->paginate(10);
+        return User::where('parent_id', $userId)->with('urls')->paginate(10);
     }
 
     public function store($data,$parentId)
@@ -31,9 +31,13 @@ class MemberService
         ]);
     }
 
-    public function update()
+    public function updateMember(User $member, $data)
     {
-        //
+        return $member->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone_number' => $data['phone_number'],
+        ]);
     }
 
     public function deleteMember($member, $parentId)

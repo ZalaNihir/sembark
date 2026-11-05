@@ -25,6 +25,11 @@
                         {{ __('Members') }}
                     </x-nav-link>
                     @endcan
+                    @can('url.view')
+                    <x-nav-link :href="route('urls.index')" :active="request()->routeIs('urls.index')">
+                        {{ __('URLs') }}
+                    </x-nav-link>
+                    @endcan
                 </div>
             </div>
 
@@ -88,6 +93,11 @@
             @can('members.view')
             <x-responsive-nav-link :href="route('members.index')" :active="request()->routeIs('members.index')">
                 {{ __('Members') }}
+            </x-responsive-nav-link>
+            @endcan
+            @can('url.view')
+            <x-responsive-nav-link :href="route('urls.index')" :active="request()->routeIs('urls.index')">
+                {{ __('URLs') }}
             </x-responsive-nav-link>
             @endcan
         </div>

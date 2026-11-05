@@ -14,7 +14,7 @@ class MemberController extends Controller
 
     public function index()
     {
-        $members  = $this->memberService->getAllMembers();
+        $members  = $this->memberService->getAllMembers(auth()->id());
 
         return view('members.index',compact('members'));
     }
@@ -30,6 +30,21 @@ class MemberController extends Controller
         return redirect()->route('members.index')->with('success','Member created successfully.');
     }
 
+    public function show(User $member)
+    {
+        if(!$member->parent_id){
+            return abort(404);
+        }
+
+        if($member->parent_id != auth()->id()){
+            return abort(404);
+        }
+
+        $member->load('urls');
+
+        return view('members.show',compact('member'));
+    }
+
     public function edit(User $member)
     {
         if(!$member->parent_id){
@@ -43,9 +58,11 @@ class MemberController extends Controller
         return view('members.edit',compact('member'));
     }
 
-    public function update()
+    public function update(MemberRequest $request, User $member)
     {
-        //
+        $this->memberService->updateMember($member, $request->all());
+
+        return redirect()->route('members.index')->with('success','Member updated successfully.');
     }
 
     public function destroy(User $member){

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MemberRequest extends FormRequest
 {
@@ -22,9 +23,11 @@ class MemberRequest extends FormRequest
      */
     public function rules(): array
     {
+        $memberId = is_object($this->member) ? $this->member->id : $this->member;
+
         return [
             'name'=>['required','max:255'],
-            'email' => ['required','email','max:100','unique:users,email'],
+            'email' => ['required','email','max:100',Rule::unique('users', 'email')->ignore($memberId),],
             'phone_number' => ['required','max:100'],
         ];
     }

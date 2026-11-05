@@ -30,7 +30,15 @@ class MasterAdminSeeder extends Seeder
             'members.delete',
         ];
 
-        $allPermissions = array_merge($companyPermissions, $memberPermissions);
+        $shortenUrlPermissions = [
+            'url.view',
+            'url.create',
+            'url.edit',
+            'url.delete',
+        ];
+
+        $allPermissions = array_merge($companyPermissions, $memberPermissions, $shortenUrlPermissions);
+        $adminPermissions = array_merge($memberPermissions, $shortenUrlPermissions);
 
         foreach ($allPermissions as $permission) {
             Permission::firstOrCreate([
@@ -51,18 +59,13 @@ class MasterAdminSeeder extends Seeder
             'guard_name' => 'web',
         ]);
 
-        $adminRole->syncPermissions($memberPermissions);
+        $adminRole->syncPermissions($adminPermissions);
 
-        $otherRoles = [
-            'Member',
-        ];
-
-        foreach ($otherRoles as $roleName) {
-            Role::firstOrCreate([
-                'name' => $roleName,
-                'guard_name' => 'web',
-            ]);
-        }
+        $memberRole= Role::firstOrCreate([
+            'name' => 'Member',
+            'guard_name' => 'web',
+        ]);
+        $memberRole->syncPermissions($shortenUrlPermissions);
 
         User::updateOrCreate(
             ['email' => 'masteradmin@example.com'],

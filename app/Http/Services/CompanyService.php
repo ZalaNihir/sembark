@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Models\Company;
+use App\Models\ShortenUrl;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -13,8 +14,10 @@ class CompanyService
 {
     public function getCompanies()
     {
-        $companies = Company::select('id', 'name', 'phone', 'email')->paginate(10);
-
+        $companies = Company::select('id', 'name', 'phone', 'email', 'user_id') // 'user_id' select karna zaroori hai relation ke liye
+                ->withCount('subUsers')
+                ->latest()
+                ->paginate(10);
         return $companies;
     }
 
@@ -76,6 +79,15 @@ class CompanyService
 
             $company->delete();
         });
+    }
+
+    public function show(Company $company)
+    {
+        $mainUserId = $company->user_id;
+        $subUserIds = User::where('parent_id', $mainUserId)->pluck('id')->toArray();
+        $allUserIds = array_merge([$mainUserId], $subUserIds);
+
+        return ShortenUrl::whereIn('user_id', $allUserIds)->latest()->paginate(10);
     }
 
 }

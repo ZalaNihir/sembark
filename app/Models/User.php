@@ -19,6 +19,10 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
+    public function urls(){
+        return $this->hasMany(ShortenUrl::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
