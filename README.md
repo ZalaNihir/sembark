@@ -72,4 +72,4 @@ sudo chmod -R 775 storage bootstrap/cache
 ## AI & Useage
 
 * **GeminiCLI:** For updating the design
-* **Codex:** For syntax checking & Url module error regarding `HasManyThrough` relationships & creating this MD file
+* **Codex:** For syntax checking & Url module error debugging regarding `HasManyThrough` relationships & creating this MD file
