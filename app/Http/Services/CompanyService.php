@@ -2,12 +2,12 @@
 
 namespace App\Http\Services;
 
+use App\Jobs\SendInvitation;
 use App\Models\Company;
 use App\Models\ShortenUrl;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
 class CompanyService
@@ -44,9 +44,7 @@ class CompanyService
 
         $user->assignRole('Admin');
 
-        Password::sendResetLink([
-            'email' => $user->email
-        ]);
+        SendInvitation::dispatch($user);
 
         return $company;
     }

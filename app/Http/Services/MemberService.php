@@ -2,10 +2,10 @@
 
 namespace App\Http\Services;
 
+use App\Jobs\SendInvitation;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Pest\Support\Str;
+use Illuminate\Support\Str;
 
 class MemberService
 {
@@ -26,9 +26,7 @@ class MemberService
 
         $user->assignRole('Member');
 
-        Password::sendResetLink([
-            'email' => $user->email
-        ]);
+        SendInvitation::dispatch($user);
     }
 
     public function updateMember(User $member, $data)

@@ -9,9 +9,18 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\InvitationController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+    Route::get('invitation/{user}', [InvitationController::class, 'show'])
+        ->middleware('signed')
+        ->name('invitation.accept');
+
+    Route::post('invitation/{user}', [InvitationController::class, 'accept'])
+        ->middleware('signed')
+        ->name('invitation.store');
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 

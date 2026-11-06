@@ -19,6 +19,10 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
+    public function parent(){
+        return $this->belongsTo(User::class, 'parent_id');
+    }
+
     public function urls(){
         return $this->hasMany(ShortenUrl::class);
     }
