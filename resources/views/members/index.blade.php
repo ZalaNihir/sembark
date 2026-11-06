@@ -73,7 +73,8 @@
                                             @endcan
                                             @can('members.delete')
                                                 <form action="{{ route('members.destroy', $member) }}" method="POST"
-                                                    class="inline">
+                                                    class="inline"
+                                                    onsubmit="return confirm('Are you sure you want to delete this member?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

@@ -56,7 +56,8 @@
                                             @endcan
                                             @can('url.delete')
                                                 <form action="{{ route('urls.destroy', $url) }}" method="POST"
-                                                    class="inline">
+                                                    class="inline"
+                                                    onsubmit="return confirm('Are you sure you want to delete this URL?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

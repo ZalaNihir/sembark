@@ -75,7 +75,8 @@
                                             @endcan
                                             @can('companies.delete')
                                                 <form action="{{ route('companies.destroy', $company) }}" method="POST"
-                                                    class="inline">
+                                                    class="inline"
+                                                    onsubmit="return confirm('Are you sure you want to delete this company?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
