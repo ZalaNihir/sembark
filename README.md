@@ -19,7 +19,7 @@ Duplicate the example distribution settings template to instantiate your operati
 cp .env.example .env
 ```
 
-Now, open the newly created `.env` file using your text editor and accurately specify your  environment constraints, including app configurations and target relational database attributes:
+Now, open the newly created `.env` file using your text editor and accurately specify your  environment constraints, including app configurations and target relational database attributes along with that update the mail varibale for sending the emails:
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -27,6 +27,15 @@ DB_PORT=3306
 DB_DATABASE=database_name
 DB_USERNAME=database_user
 DB_PASSWORD=secure_password
+
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=yoursername
+MAIL_PASSWORD=password
+MAIL_FROM_ADDRESS="admin@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
 ```
 
 ### 4. Generate Application Encryption Key
@@ -42,10 +51,12 @@ php artisan migrate --seed
 ```
 
 ### 6. Install Node Dependencies & Build Assets
-Compile the core JavaScript layouts, Tailwind utility layouts, and application styles via Vite:
+Compile the core JavaScript layouts, Tailwind utility layouts, and application styles via Vite & start the queue worker
 ```bash
 npm install
 npm run build
+
+php artisan queue:work
 ```
 
 ### 7. Optimize System Cache Assemblies
